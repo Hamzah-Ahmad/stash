@@ -1,16 +1,65 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
 :root {
   --dark: #0e2e3b;
   --primary: #166678;
   --secondary: #7db9b3;
   --light: #d8d7c3;
+  --radius: 6px;
 }
 
-
+html,
 body {
   margin: 0;
-  padding: 48px;
+  max-height: 100vh;
+  /* padding: 48px; */
   background-color: var(--dark);
   color: var(--light);
-
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
 }
 
+.sidebar {
+  /* absolute border border-light p-2 rounded */
+  position: absolute;
+  border: 0.25px solid var(--light);
+  border-radius: var(--radius);
+  top: 40px;
+  /* transform: translateY(-50%); */
+  left: 40px;
+}
+
+.sidebar__items {
+  width: 240px;
+  max-height: 75vh !important;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar__row {
+  padding: 12px;
+  white-space: nowrap; /* Prevent wrapping */
+  overflow: hidden; /* Hide overflow */
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.sidebar__row:not(:last-child) {
+  border-bottom: 0.25px solid var(--light);
+}
+
+.title__input {
+  border: 0.5px solid var(--light);
+  border-radius: var(--radius);
+  padding: 4px;
+  padding-left: 12px;
+  /* outline-color: var(--secondary); */
+}
+
+.title__input:focus {
+  outline-style: solid;
+  outline-width: thin;
+  outline-color: var(--secondary);
+}

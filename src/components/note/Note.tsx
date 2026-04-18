@@ -1,42 +1,31 @@
-import { useEffect, useState } from "react";
-import { addNote, getNoteById, type NoteType } from "../../utils/db";
+import { type NoteType } from "../../utils/db";
+import { useStorageContext } from "../../context/StorageContext";
 
-type NoteProps = {
-  id?: string;
-};
-
-const Note = ({ id }: NoteProps) => {
-  const [note, setNote] = useState<NoteType | undefined>();
-
-  async function fetchNote() {
-    if (!id) return;
-    try {
-      const result = await getNoteById(id);
-      setNote(result);
-    } catch (err) {
-      console.log("Error occured while fetching note");
-      setNote(undefined);
-    }
-  }
+const Note = () => {
+  const { handleUpsertNote, selectedNote } = useStorageContext();
 
   async function handleChange(
     field: keyof NoteType,
     value: string,
   ): Promise<any> {
-    await addNote({
-      ...note,
+    if (!selectedNote) return;
+
+    await handleUpsertNote({
+      ...selectedNote,
       [field]: value,
     });
   }
 
-  useEffect(() => {
-    fetchNote();
-  });
-
+  if (!selectedNote) return null;
   return (
-    <div>
-      {id} - {note?.title}
-      <input onChange={(e) => handleChange("title", e.target?.value)} />
+    <div className="flex flex-col justify-center items-center p-10">
+      <input
+        className="title__input"
+        onChange={(e) => {
+          handleChange("title", e.target.value);
+        }}
+        defaultValue={selectedNote?.title}
+      />
     </div>
   );
 };

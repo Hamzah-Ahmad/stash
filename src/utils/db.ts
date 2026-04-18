@@ -4,7 +4,8 @@ const STORE_NAME = "stash_items";
 
 export type NoteType = {
   id: string;
-  title: string;
+  order: number;
+  title?: string;
   text?: string;
   code?: string;
 };
@@ -42,9 +43,10 @@ export async function getNotes(searchQuery?: string): Promise<NoteType[]> {
     request.onsuccess = () => {
       let results = request.result as NoteType[];
       if (searchQuery) {
-        results = results.filter((note) =>
-          note.title.toLowerCase().includes(searchQuery.toLowerCase()),
-        );
+        results = results.filter((note) => {
+          if (!note.title) return false;
+          return note.title.toLowerCase().includes(searchQuery.toLowerCase());
+        });
       }
 
       resolve(results);
@@ -66,12 +68,14 @@ export async function getNoteById(id: string): Promise<NoteType | undefined> {
   });
 }
 
-export async function addNote(noteDto: Partial<NoteType>): Promise<void> {
+export async function upsertNote(
+  noteDto: Partial<NoteType> = {},
+): Promise<void> {
   const db = await setupDB();
   return new Promise((resolve, reject) => {
     const tx = db.transaction(STORE_NAME, "readwrite");
     const store = tx.objectStore(STORE_NAME);
-    if(!noteDto.id) noteDto.id = crypto.randomUUID();
+    if (!noteDto.id) noteDto.id = crypto.randomUUID();
     const request = store.put(noteDto);
 
     request.onsuccess = () => resolve();

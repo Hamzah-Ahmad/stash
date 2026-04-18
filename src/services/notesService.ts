@@ -1,4 +1,4 @@
-import { addNote, getNoteById, getNotes, type NoteType } from "../utils/db";
+import { upsertNote, getNoteById, getNotes, type NoteType } from "../utils/db";
 
 export const noteService = {
   getAll: async (): Promise<NoteType[]> => {
@@ -10,9 +10,9 @@ export const noteService = {
     }
   },
 
-  create: async (note: Partial<NoteType>): Promise<void> => {
+  upsert: async (note: Partial<NoteType> | undefined): Promise<void> => {
     try {
-      return await addNote(note);
+      return await upsertNote(note);
     } catch (err) {
       throw new Error("Failed to create note", { cause: err });
     }
