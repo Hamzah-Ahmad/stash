@@ -23,16 +23,13 @@ body {
 
 .sidebar {
   /* absolute border border-light p-2 rounded */
-  position: absolute;
   border: 0.25px solid var(--light);
   border-radius: var(--radius);
-  top: 40px;
-  /* transform: translateY(-50%); */
-  left: 40px;
+  margin: 40px;
+  flex: 0.5;
 }
 
 .sidebar__items {
-  width: 240px;
   max-height: 75vh !important;
   overflow-y: auto;
   overflow-x: hidden;

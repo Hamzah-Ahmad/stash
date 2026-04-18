@@ -9,7 +9,6 @@ const Sidebar = () => {
 
   const [draggedNote, setDraggedNote] = useState<NoteType | null>(null);
 
-
   const create = async () => {
     const newNote = await handleUpsertNote();
     if (newNote) handleSelectNote(newNote.id);

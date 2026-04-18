@@ -4,7 +4,7 @@ import Sidebar from "../components/sidebar";
 const Notes = () => {
 
   return (
-    <div>
+    <div className="flex items-baseline">
       <Sidebar />
       <Note />
       

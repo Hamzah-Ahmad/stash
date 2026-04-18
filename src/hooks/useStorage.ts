@@ -27,7 +27,7 @@ const useStorage = () => {
     try {
       const noteToSave = noteDto ?? {
         id: crypto.randomUUID(),
-        order: notes?.length || 0,
+        order: (notes?.length ?? 0) + 1, // Order should start from 1. 0 causes bugs like when trying to caclulate the lowest order dynamically (0/2 is 0. More explanation below)
       };
 
       await noteService.upsert(noteToSave);
@@ -35,8 +35,8 @@ const useStorage = () => {
       await handleGetNotes();
 
       // If dragged note is the current selectedNote, update selectedNote with the updated info
-      if(noteDto?.id === selectedNote?.id) {
-        setSelectedNote(noteDto)
+      if (noteDto?.id === selectedNote?.id) {
+        setSelectedNote(noteDto);
       }
 
       // await handleGetNotes()
@@ -74,15 +74,13 @@ const useStorage = () => {
       notes[(notes.findIndex((note) => note.id === targetNote.id) || 0) + 1];
 
     // Calculating new order of dragged note accorrding to logic written above
-    const newOrder = ((noteAfterTargetNote?.order || 0) + targetNote.order) / 2;
+    // Explanation for the else ternary is at the bottom of the file
+    // debugger;
+    const newOrder = noteAfterTargetNote
+      ? (noteAfterTargetNote?.order + targetNote.order) / 2
+      : notes?.[notes?.length - 1]?.order / 2;
 
     await handleUpsertNote({ ...draggedNote, order: newOrder });
-    // setNotes(
-    //   notes.map((note) => {
-    //     if (note.id === draggedNote.id) return { ...note, order: newOrder };
-    //     else return note;
-    //   }),
-    // );
   }
 
   useEffect(() => {
@@ -102,3 +100,32 @@ const useStorage = () => {
 };
 
 export default useStorage;
+
+// Explanation of ternary insid ethe handleReorder (i.e       : notes?.[notes?.length]?.order / 2;)
+// Our notes are ordered in a descending manner in the global state. Example:
+
+// [
+//      {
+//     "id": "cc7f9129-5a36-461b-b9ce-a68c1ed830d8",
+//     "order": 1,
+//     "title": "3"
+// },
+// {
+//     "id": "0794591e-98cb-4d10-b95d-18cef8da16b5",
+//     "order": 0,
+//     "title": "4"
+// },
+// {
+//     "id": "110e7ef5-c522-42ef-98ac-67c491813700",
+//     "order": 0,
+//     "title": "1"
+// },
+// {
+//     "id": "170d144c-1f10-4272-8720-f57ecda846b6",
+//     "order": null,
+//     "title": "2"
+// }
+//   ]
+
+// If we don't find a noteAfterTargetNote, that implies that we want to drag the selectedNote to the bottom. So we need to find the last note and change the order of the dragged note lesser than the last note
+// We subtracted 1 from notes.length (notes?.length - 1) because our order is 1 based, not 0 based
