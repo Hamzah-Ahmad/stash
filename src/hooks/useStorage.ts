@@ -8,6 +8,8 @@ const useStorage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
+  console.log("LOGGER - notes: ", notes);
+
   async function handleGetNotes() {
     setIsLoading(true);
     try {
@@ -64,21 +66,36 @@ const useStorage = () => {
   }
 
   async function handleReorder(draggedNote: NoteType, targetNote: NoteType) {
-    // Explanation:
+    // Explanation of calculating new order of dragged note:
     // Using an interview question technique I heard from a collegue to reorder.
     // If we want to move note at order A after note at order D, we get the midpoint of order D and E and set that as the order of
     // the original note (i.e. the note originally with order A). This allows to reorder withiut changing order of other notes.
     // For example, if note originally has order 4 and user moves it after 9, we set the new order of the note as (9 + 10) / 2
-    // Getting note adjacent to target note
-    const noteAfterTargetNote =
-      notes[(notes.findIndex((note) => note.id === targetNote.id) || 0) + 1];
+    // Getting note adjacent to target note.
 
-    // Calculating new order of dragged note accorrding to logic written above
-    // Explanation for the else ternary is at the bottom of the file
-    // debugger;
-    const newOrder = noteAfterTargetNote
-      ? (noteAfterTargetNote?.order + targetNote.order) / 2
-      : notes?.[notes?.length - 1]?.order / 2;
+    let adjacentNote;
+    let newOrder;
+
+    // Case when draggedNote order is originally greater than target note (so dragging the draggedNote "down". Example note with order 4 is being dragged to note with order 3.)
+    if (draggedNote.order > targetNote.order) {
+      adjacentNote =
+        notes[(notes.findIndex((note) => note.id === targetNote.id)) + 1]; // +1 as we are in desscending order and note is being dragged down so we get midppoint between target note and the note after that in descending order. Example, note with order 4 being dragged down to note with order 3, and the next item will be note with order 2. So dragged row order will change to 2.5 ((3+2) / 2)
+
+      // Calculating new order of dragged note accorrding to logic written above
+      // Explanation for the else ternary is at the bottom of the file
+      newOrder = adjacentNote
+        ? (adjacentNote?.order + targetNote.order) / 2
+        : notes?.[notes?.length - 1]?.order / 2;
+
+    } else {
+
+     // Else block logic explained below
+      adjacentNote =
+        notes[notes.findIndex((note) => note.id === targetNote.id) - 1];
+      newOrder = adjacentNote
+        ? (adjacentNote?.order + targetNote.order) / 2
+        : notes?.[0]?.order + 1;
+    }
 
     await handleUpsertNote({ ...draggedNote, order: newOrder });
   }
@@ -129,3 +146,14 @@ export default useStorage;
 
 // If we don't find a noteAfterTargetNote, that implies that we want to drag the selectedNote to the bottom. So we need to find the last note and change the order of the dragged note lesser than the last note
 // We subtracted 1 from notes.length (notes?.length - 1) because our order is 1 based, not 0 based
+
+// Else block logic
+// else {
+//       adjacentNote =
+//         notes[notes.findIndex((note) => note.id === targetNote.id) - 1];
+//       newOrder = adjacentNote
+//         ? (adjacentNote?.order + targetNote.order) / 2
+//         : notes?.[0]?.order + 1;
+//     }
+
+// Getting adjacentNote 

@@ -2,7 +2,7 @@ import { type NoteType } from "../../utils/db";
 import { useStorageContext } from "../../context/StorageContext";
 
 const Note = () => {
-  const { handleUpsertNote, selectedNote, notes } = useStorageContext();
+  const { handleUpsertNote, selectedNote } = useStorageContext();
 
   async function handleChange(
     field: keyof NoteType,
