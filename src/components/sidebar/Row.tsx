@@ -1,8 +1,4 @@
-import {
-  type Dispatch,
-  type DragEvent,
-  type SetStateAction,
-} from "react";
+import { type Dispatch, type DragEvent, type SetStateAction } from "react";
 import type { NoteType } from "../../utils/db";
 
 interface RowProps {
@@ -39,7 +35,6 @@ const Row = ({
     }
   }
 
-
   return (
     <div
       className="sidebar__row"
@@ -50,7 +45,7 @@ const Row = ({
       onDrop={(e) => handleDrop(e, note)}
       draggable
     >
-      {note.title || "Untitled"}
+      {note.title || `Untitled  ${note?.id?.substring(0,4)}`}
     </div>
   );
 };

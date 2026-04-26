@@ -66,10 +66,8 @@ const Search = ({ onClose, search }: SearchProps) => {
     setFocusedNoteIndx(-1);
   }, [results]);
 
-  console.log("LOGGER - focusedNoteIndx: ", focusedNoteIndx);
 
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-    console.log("LOGGER - here", e.key);
 
     if (e.key === "ArrowUp") {
       setFocusedNoteIndx((prev) => {
