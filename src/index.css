@@ -60,3 +60,12 @@ body {
   outline-width: thin;
   outline-color: var(--secondary);
 }
+
+.modal {
+  background-color: red;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  transform: translate(-30%, -50%);
+
+}

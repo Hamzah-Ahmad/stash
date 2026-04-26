@@ -8,8 +8,6 @@ const useStorage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  console.log("LOGGER - notes: ", notes);
-
   async function handleGetNotes() {
     setIsLoading(true);
     try {

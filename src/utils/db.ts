@@ -8,6 +8,7 @@ export type NoteType = {
   title?: string;
   text?: string;
   code?: string;
+  table?: string;
 };
 
 export async function setupDB(): Promise<IDBDatabase> {

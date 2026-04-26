@@ -9,6 +9,9 @@ export default {
         secondary: "var(--secondary)",
         light: "var(--light)",
       },
+      borderRadius: {
+        radius: "var(--radius)",
+      },
     },
   },
   plugins: [],
