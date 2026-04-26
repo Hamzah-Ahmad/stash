@@ -3,7 +3,6 @@ import { createPortal } from "react-dom";
 import Search from "./Search";
 import useStorage from "../../hooks/useStorage";
 import type { NoteType } from "../../utils/db";
-import { NoteCategory } from "../note/Note";
 
 export type SearchResult = {
   index: number;
@@ -41,7 +40,7 @@ export default function SearchWrapper() {
                 String(note?.[field] ?? "").length - 1,
                 index + 10,
               ),
-              query,
+              query: trimmedQuery,
             };
           }
         }

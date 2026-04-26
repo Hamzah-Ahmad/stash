@@ -39,7 +39,7 @@ const Search = ({ onClose, search }: SearchProps) => {
   const [results, setResults] = useState<SearchResult[] | null>(null);
 
   function handleSearch(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
-    const searchResults = search(e.target?.value?.trim());
+    const searchResults = search(e.target?.value);
     if (Array.isArray(searchResults)) {
       setResults(searchResults);
     }
