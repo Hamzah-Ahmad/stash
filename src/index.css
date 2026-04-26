@@ -2,18 +2,48 @@
 @config "../tailwind.config.js";
 
 :root {
-  --dark: #0e2e3b;
-  --primary: #166678;
-  --secondary: #7db9b3;
-  --light: #d8d7c3;
+  --dark: #1a1e26;
+  --primary: #2563eb;
+  --secondary: #7dd3fc;
+  --light: #f1f5f9;
   --radius: 6px;
+  --radius-lg: 12px;
+
+  --surface: #1f2d3d;
+  --surface-2: #253545;
+  --deep: #141c27;
+  --deeper: #0e1520;
+
+  --text-1: #c4d0da;
+  --text-2: #8a9baa;
+  --text-3: #5a6a78;
+  --text-4: #3a4a58;
+
+  --border: rgba(255, 255, 255, 0.06);
+  --border-light: rgba(255, 255, 255, 0.555);
+  --border-glow: rgba(100, 160, 210, 0.18);
+
+  /* ── Grain ── */
+  --grain: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ── Grain overlay ── */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: var(--grain);
+  background-size: 180px 180px;
+  background-repeat: repeat;
+  opacity: 0.042;
+  pointer-events: none;
+  z-index: 9999;
 }
 
 html,
 body {
   margin: 0;
   max-height: 100vh;
-  /* padding: 48px; */
   background-color: var(--dark);
   color: var(--light);
   padding: 0;
@@ -21,12 +51,16 @@ body {
   overflow: hidden;
 }
 
+/* ── rest of your existing styles unchanged ── */
+
 .sidebar {
-  /* absolute border border-light p-2 rounded */
-  border: 0.25px solid var(--light);
   border-radius: var(--radius);
-  margin: 40px;
   flex: 0.5;
+  height: 100vh;
+  background-color: var(--surface-2);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 40px;
 }
 
 .sidebar__items {
@@ -37,22 +71,22 @@ body {
 
 .sidebar__row {
   padding: 12px;
-  white-space: nowrap; /* Prevent wrapping */
-  overflow: hidden; /* Hide overflow */
+  white-space: nowrap;
+  overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
+  border: 1px solid var(--text-1);
 }
 
-.sidebar__row:not(:last-child) {
+/* .sidebar__row:not(:last-child) {
   border-bottom: 0.25px solid var(--light);
-}
+} */
 
 .title__input {
   border: 0.5px solid var(--light);
   border-radius: var(--radius);
   padding: 4px;
   padding-left: 12px;
-  /* outline-color: var(--secondary); */
 }
 
 .title__input:focus {
@@ -61,11 +95,24 @@ body {
   outline-color: var(--secondary);
 }
 
-.modal {
-  background-color: red;
+.search-modal {
+  background-color: var(--surface);
   position: absolute;
   top: 30%;
   left: 50%;
   transform: translate(-30%, -50%);
+  border-radius: var(--radius-lg);
+}
 
+.search-modal input {
+  /* border: 1px solid var(--border-light); */
+  border-radius: var(--radius-lg);
+  width: 50rem;
+  height: 3rem;
+  padding: 12px;
+}
+
+.search-modal input:focus {
+  border: 1px solid var(--border-light);
+  outline: none;
 }

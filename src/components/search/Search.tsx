@@ -1,49 +1,69 @@
-import { useEffect, useRef, useState } from "react";
-import { createPortal } from "react-dom";
-import SearchModal from "./SearchModal";
+import { useRef, useState, type ChangeEvent } from "react";
 import useOnClickOutside from "../../hooks/useOnClickOutside";
+import type { SearchResult } from "./SearchWrapper";
 
-export default function Seach() {
-  const [showModal, setShowModal] = useState(false);
+type SearchProps = {
+  onClose: () => void;
+  search: (query: string) => any;
+};
 
+const ResultRow = ({ result }: { result: SearchResult }) => {
+  const { endIndex, field, note, query, startIndex } = result;
+  const substring = (note?.[field] as string)?.substring(
+    startIndex,
+    endIndex + 1,
+  );
+
+  const stringArr = substring.split(new RegExp(`(${query})`, "gi"));
+  console.log("LOGGER - stringArr: ", {stringArr, result})
+  return (
+    <div className="p-4">
+      <div>{note?.title || "Untitled"}</div>
+      <small>
+        ...{stringArr?.map((item) => (
+          <>
+            {item?.toLowerCase() === query?.toLowerCase() ? (
+              <span className="bg-red-300">{item}</span>
+            ) : (
+              <>{item}</>
+            )}
+          </>
+        ))}...
+      </small>
+    </div>
+  );
+};
+const Search = ({ onClose, search }: SearchProps) => {
   const ref = useRef<HTMLDivElement>(null);
 
+  const [results, setResults] = useState<SearchResult[] | null>(null);
+
+  function handleSearch(e: ChangeEvent<HTMLInputElement, HTMLInputElement>) {
+    const searchResults = search(e.target?.value?.trim());
+    if (Array.isArray(searchResults)) {
+      setResults(searchResults);
+    }
+  }
+
   function handleOnClickOutside() {
-    setShowModal(false);
+    setResults([]);
+
+    onClose();
   }
 
   useOnClickOutside(ref, handleOnClickOutside);
-  useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && showModal) {
-        setShowModal(false);
-      }
-
-      if (e.key === " " && e.shiftKey) {
-        console.log("LOGGER - Shift + Space detected!");
-        setShowModal(true);
-      }
-    };
-
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [open]);
-
-  //   if (event.key === ' ' && event.shiftKey) {
-  //   console.log("Shift + Space detected!");
-  //   // Optional: prevent default behavior like page scrolling
-  //   event.preventDefault();
-  // }
   return (
-    <div ref={ref}>
-      <button onClick={() => setShowModal(true)}>
-        Show modal using a portal
-      </button>
-      {showModal &&
-        createPortal(
-          <SearchModal onClose={() => setShowModal(false)} />,
-          document.body,
-        )}
+    <div className="search-modal" ref={ref}>
+      <input autoFocus onChange={handleSearch} />
+      {results?.length ? (
+        <div className="h-fit w-full bg-surface-2">
+          {results.map((result: SearchResult) => (
+            <ResultRow result={result} key={result?.note?.id} />
+          ))}
+        </div>
+      ) : null}
     </div>
   );
-}
+};
+
+export default Search;

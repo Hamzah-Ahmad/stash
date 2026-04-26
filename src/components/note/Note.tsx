@@ -3,16 +3,19 @@ import { useStorageContext } from "../../context/StorageContext";
 import Textpad from "../shared/Textpad";
 import CategoryPicker from "./CategoryPicker";
 import { useState } from "react";
-import Table from "../shared/Table";
 import TableSection from "./TableSection";
 
-export const NoteCategory = { Text: "TEXT", Table: "TABLE" } as const;
+export const NoteCategory = {
+  text: "text",
+  table: "table",
+  code: "code",
+} as const;
 export type NoteCategory = (typeof NoteCategory)[keyof typeof NoteCategory];
 
 const Note = () => {
   const { handleUpsertNote, selectedNote } = useStorageContext();
 
-  const [category, setCategory] = useState<NoteCategory>(NoteCategory.Text);
+  const [category, setCategory] = useState<NoteCategory>(NoteCategory.text);
   async function handleChange(
     field: keyof NoteType,
     value: string,
@@ -26,7 +29,7 @@ const Note = () => {
   }
 
   return (
-    <div className="flex flex-2 flex-col justify-center items-center p-10">
+    <div className="flex flex-2 flex-col justify-center items-center">
       {!selectedNote ? null : (
         <>
           <input
@@ -37,14 +40,29 @@ const Note = () => {
             value={selectedNote?.title}
           />
           <CategoryPicker setCategory={setCategory} />
-          {category === NoteCategory.Text && (
+          {category === NoteCategory.text && (
             <Textpad
+              key="text"
               handleChange={handleChange}
-              defaultValue={selectedNote?.text}
+              value={selectedNote?.text}
             />
           )}
-          {/* {category === NoteCategory.Table && <Table columns={undefined} data={undefined} handleChange={handleChange} />} */}
-          {category === NoteCategory.Table && <TableSection selectedNote={selectedNote} handleChange={handleChange} />}
+          {category === NoteCategory.table && (
+            <TableSection
+              key="table"
+              selectedNote={selectedNote}
+              handleChange={handleChange}
+            />
+          )}
+          {category === NoteCategory.code && (
+            <textarea
+              key="code-editor"
+              className="border border-red w-full rounded-radius p-3"
+              onChange={(e) => handleChange("code", e.target?.value)}
+              rows={5}
+              value={selectedNote?.code}
+            />
+          )}
         </>
       )}
     </div>

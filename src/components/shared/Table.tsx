@@ -99,7 +99,6 @@ const Table = <T extends Record<string, unknown> & { id: string | number }>({
     columns.map((col) => {
       newRow[col.id] = "";
     });
-    // console.log("LOGGER - handleAddRow: ", newRow);
 
     handleChange("table", JSON.stringify({ rows: [...rows, newRow], columns }));
   }
@@ -205,7 +204,7 @@ const Table = <T extends Record<string, unknown> & { id: string | number }>({
                   />
                 ); //String(rowItem[col.id] ?? "—");
                 return (
-                  <td className="py-4 text-center border border-light">
+                  <td className="py-4 text-center border-red">
                     {value}
                   </td>
                 );

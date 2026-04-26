@@ -3,13 +3,13 @@ import { StorageProvider } from "../context/StorageContext";
 import Notes from "./Notes";
 
 function App() {
- 
-
   return (
-    <StorageProvider>
-     <Notes />
-     <Seach />
-    </StorageProvider>
+    <div className="grain-global">
+      <StorageProvider>
+        <Notes />
+        <Seach />
+      </StorageProvider>
+    </div>
   );
 }
 

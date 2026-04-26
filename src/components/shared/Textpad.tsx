@@ -2,17 +2,17 @@ import type { NoteType } from "../../utils/db";
 
 const Textpad = ({
   handleChange,
-  defaultValue
+  value
 }: {
   handleChange: (field: keyof NoteType, value: string) => Promise<any>;
-  defaultValue?: string
+  value?: string
 }) => {
 
   
   return (
     <textarea
-      defaultValue={defaultValue}
-      className="border border-light w-full rounded-radius p-3"
+      value={value}
+      className="border border-red w-full rounded-radius p-3"
       onChange={(e) => handleChange("text", e.target?.value)}
       rows={10}
     />

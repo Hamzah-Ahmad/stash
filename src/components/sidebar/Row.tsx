@@ -24,20 +24,16 @@ const Row = ({
   }
 
   function handleDragEnd(_: DragEvent<HTMLDivElement>, __: NoteType) {
-    // console.log("LOGGER - handleDragEnd e[target]: ", e.target)
     setDraggedNote(null);
   }
 
   // Drag Over (and setting e.preventDefault) is required to make drop work.  Applies to Drop Target
   function handleDragOver(e: DragEvent<HTMLDivElement>) {
-    // console.log("LOGGER - handleDragOver: ", e)
-    // console.log("LOGGER - handleDragOver e[target]: ", e.target)
     e.preventDefault();
   }
 
   // Applies to Drop Target
   function handleDrop(_: DragEvent<HTMLDivElement>, note: NoteType) {
-    // console.log("LOGGER - handleDrop e[target]: ", e.target)
     if (draggedNote) {
       handleReorder(draggedNote, note);
     }
