@@ -5,10 +5,12 @@ import type { NoteType } from "../../utils/db";
 import { throttle } from "../../utils/helpers";
 
 const Sidebar = () => {
-  const { notes, handleSelectNote, handleUpsertNote, handleReorder } =
+  const { notes, handleSelectNote, handleUpsertNote, handleReorder, selectedNote } =
     useStorageContext();
 
   const sidebarRef = useRef<HTMLDivElement>(null);
+
+  const [searchQuery, setSearchQuery] = useState("");
 
   const [draggedNote, setDraggedNote] = useState<NoteType | null>(null);
 
@@ -25,12 +27,26 @@ const Sidebar = () => {
   }
 
   const throttledScroll = throttle(handleScroll, 450);
+  const filteredNotes = notes?.filter(note => {
+    if(!searchQuery) return true;
+    return note.title?.includes(searchQuery)
+  })
 
   return (
     <div className="sidebar">
-      <button className="sidebar__row w-full cursor-pointer" onClick={create}>
-        Create Note
-      </button>
+      <div className="m-10 mb-14 flex flex-col gap-10 justify-center">
+        <input
+          className="border border-thin w-[95% rounded-full h-14 pl-6"
+          placeholder="Search a note by title"
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button
+          className="border border-thin py-5  cursor-pointer rounded-radius-lg"
+          onClick={create}
+        >
+          Create Note
+        </button>
+      </div>
       <div
         onDragOver={() => {
           if (draggedNote?.id) {
@@ -39,7 +55,7 @@ const Sidebar = () => {
         }}
       ></div>
       <div className="sidebar__items" ref={sidebarRef}>
-        {notes?.map((note) => (
+        {filteredNotes?.map((note) => (
           <Row
             note={note}
             handleSelectNote={handleSelectNote}
@@ -47,6 +63,7 @@ const Sidebar = () => {
             key={note.id}
             draggedNote={draggedNote}
             setDraggedNote={setDraggedNote}
+            isSelectedNote={selectedNote?.id === note.id}
           />
         ))}
       </div>

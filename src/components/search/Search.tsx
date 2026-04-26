@@ -100,7 +100,7 @@ const Search = ({ onClose, search }: SearchProps) => {
 
   useOnClickOutside(ref, handleOnClickOutside);
   return (
-    <div className="search-modal" ref={ref}>
+    <div className="search__modal" ref={ref}>
       <input autoFocus onChange={handleSearch} onKeyDown={onKeyDown} />
       {results?.length ? (
         <div className="h-fit max-h-96 w-full bg-surface-2 overflow-y-auto">

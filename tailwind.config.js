@@ -18,12 +18,14 @@ export default {
         "text-4": "var(--text-4)",
       },
       borderColor: {
-        border: "var(--border)",
-        "border-light": "var(--border-light)",
-        "border-glow": "var(--border-glow)",
+        regular: "var(--border-regular)",
+        "thin": "var(--border-thin)",
+        "glow": "var(--border-glow)",
       },
       borderRadius: {
         radius: "var(--radius)",
+        "radius-lg": "var(--radius-lg)",
+        
       },
     },
   },

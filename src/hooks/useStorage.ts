@@ -102,6 +102,10 @@ const useStorage = () => {
     handleGetNotes();
   }, []);
 
+  useEffect(() => {
+    if(!selectedNote) setSelectedNote(notes?.[0])
+  }, [notes])
+
   return {
     notes,
     isLoading,

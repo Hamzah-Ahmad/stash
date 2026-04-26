@@ -19,8 +19,8 @@
   --text-3: #5a6a78;
   --text-4: #3a4a58;
 
-  --border: rgba(255, 255, 255, 0.06);
-  --border-light: rgba(255, 255, 255, 0.555);
+  --border-thin: rgba(255, 255, 255, 0.2);
+  --border-regular: rgba(255, 255, 255, 0.4);
   --border-glow: rgba(100, 160, 210, 0.18);
 
   /* ── Grain ── */
@@ -55,27 +55,28 @@ body {
 
 .sidebar {
   border-radius: var(--radius);
-  flex: 0.5;
+  flex: 0.6;
   height: 100vh;
   background-color: var(--surface-2);
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 40px;
+  padding-top: 40px;
+  padding-bottom: 40px;
 }
 
 .sidebar__items {
-  max-height: 75vh !important;
+  max-height: 65vh !important;
   overflow-y: auto;
   overflow-x: hidden;
 }
 
 .sidebar__row {
-  padding: 12px;
+  padding: 24px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   cursor: pointer;
-  border: 1px solid var(--text-1);
+  border-bottom: 0.25px solid var(--border-thin);
 }
 
 /* .sidebar__row:not(:last-child) {
@@ -83,10 +84,11 @@ body {
 } */
 
 .title__input {
-  border: 0.5px solid var(--light);
+  border: 0.5px solid var(--border-thin);
   border-radius: var(--radius);
   padding: 4px;
   padding-left: 12px;
+  height: 3.5rem;
 }
 
 .title__input:focus {
@@ -95,7 +97,7 @@ body {
   outline-color: var(--secondary);
 }
 
-.search-modal {
+.search__modal {
   background-color: var(--surface);
   position: absolute;
   top: 30%;
@@ -104,15 +106,34 @@ body {
   border-radius: var(--radius-lg);
 }
 
-.search-modal input {
-  /* border: 1px solid var(--border-light); */
+.search__modal input {
+  /* border: 1px solid var(--border-thin); */
   border-radius: var(--radius-lg);
   width: 50rem;
   height: 3rem;
   padding: 12px;
 }
 
-.search-modal input:focus {
-  border: 1px solid var(--border-light);
+.search__modal input:focus {
+  border: 1px solid var(--border-thin);
   outline: none;
+}
+
+.quill__custom .ql-picker {
+  color: var(--text-3) !important;
+}
+
+.quill__custom .ql-stroke {
+  stroke: var(--text-3) !important;
+  fill: var(--text-3) !important;
+}
+
+.quill__custom .ql-toolbar,
+.quill__custom .ql-container {
+  padding: 8px 0px !important;
+  border: none !important;
+}
+
+.quill__custom .ql-editor {
+  max-height: 70%;
 }

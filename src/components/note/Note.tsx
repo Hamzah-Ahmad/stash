@@ -29,7 +29,7 @@ const Note = () => {
   }
 
   return (
-    <div className="flex flex-2 flex-col justify-center items-center">
+    <div className="flex flex-2 h-[stretch] flex-col mx-30 bg-surface border border-thin rounded-radius p-6 my-10">
       {!selectedNote ? null : (
         <>
           <input
@@ -37,14 +37,14 @@ const Note = () => {
             onChange={(e) => {
               handleChange("title", e.target.value);
             }}
-            value={selectedNote?.title}
+            value={selectedNote?.title || "Untitled"}
           />
           <CategoryPicker setCategory={setCategory} />
           {category === NoteCategory.text && (
             <Textpad
               key="text"
               handleChange={handleChange}
-              value={selectedNote?.text}
+              value={selectedNote?.text || ""}
             />
           )}
           {category === NoteCategory.table && (
@@ -57,7 +57,7 @@ const Note = () => {
           {category === NoteCategory.code && (
             <textarea
               key="code-editor"
-              className="border border-red w-full rounded-radius p-3"
+              className="border border-thin w-full rounded-radius p-3"
               onChange={(e) => handleChange("code", e.target?.value)}
               rows={5}
               value={selectedNote?.code}

@@ -7,6 +7,7 @@ interface RowProps {
   handleReorder: (draggedNote: NoteType, targetNote: NoteType) => Promise<void>;
   draggedNote: NoteType | null;
   setDraggedNote: Dispatch<SetStateAction<NoteType | null>>;
+  isSelectedNote: boolean;
 }
 const Row = ({
   note,
@@ -14,6 +15,7 @@ const Row = ({
   handleSelectNote,
   draggedNote,
   setDraggedNote,
+  isSelectedNote
 }: RowProps) => {
   function handleDragStart(_: DragEvent<HTMLDivElement>, note: NoteType) {
     setDraggedNote(note);
@@ -37,7 +39,7 @@ const Row = ({
 
   return (
     <div
-      className="sidebar__row"
+      className={`sidebar__row ${isSelectedNote? 'bg-deeper' : ''}`}
       onClick={() => handleSelectNote(note.id)}
       onDragStart={(e) => handleDragStart(e, note)}
       onDragEnd={(e) => handleDragEnd(e, note)}
@@ -45,7 +47,7 @@ const Row = ({
       onDrop={(e) => handleDrop(e, note)}
       draggable
     >
-      {note.title || `Untitled  ${note?.id?.substring(0,4)}`}
+      {note.title || `Untitled`}
     </div>
   );
 };

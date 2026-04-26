@@ -204,7 +204,7 @@ const Table = <T extends Record<string, unknown> & { id: string | number }>({
                   />
                 ); //String(rowItem[col.id] ?? "—");
                 return (
-                  <td className="py-4 text-center border-red">
+                  <td className="py-4 text-center border-thin">
                     {value}
                   </td>
                 );
