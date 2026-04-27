@@ -1,73 +1,24 @@
-# React + TypeScript + Vite
+# Description
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Built this application as a successor to my [local-notes](https://local-notes0.netlify.app/) app, where users can create notes that are stored inside the user's browser's indexed storage
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The main goal was to gain hands on experience with the following
 
-## React Compiler
+- Custom drag and drop implementation (no libraries)
+- Data table implementation with sorting, in cell editing, and sorting
+- Custom virtualization implementation from scratch (no libraries)
+- React portal
+  
+The main goal of building these without using libraries or packages is to understand how those pacakges worked underneath. 
+ NO AI was utilized while building features of this application (apart from generating svg icons), otherwise it would defeat the purpose.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## References:
+- Indexed DB: https://www.youtube.com/watch?v=yZ26CXny3iI
+- useOnClickoutside hook: https://dev.to/brdnicolas/click-outside-magic-a-new-custom-hook-4np4
+- React portal: https://react.dev/reference/react-dom/createPortal
+- React virtualization: Needed to go through multiple articles and videos to get a good gist of it
+    - https://dev.to/mr_mornin_star/create-a-react-virtualizationwindowing-component-from-scratch-54lj
+    - https://www.youtube.com/watch?v=Yz4eK-4LKXg
+    - https://medium.com/ingeniouslysimple/building-a-virtualized-list-from-scratch-9225e8bec120
