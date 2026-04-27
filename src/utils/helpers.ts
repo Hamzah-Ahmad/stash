@@ -24,4 +24,4 @@ export function throttle(func: Function, delay: number) {
 
 //It's simply a rule baked into the TypeScript compiler — this is a reserved word in JavaScript, so TypeScript uses that to its advantage.
 // When the compiler sees a parameter literally named this, it treats it specially. No regular parameter can ever be named this because it's a reserved word:
-// jsfunction foo(this, x) {} // ❌ syntax error in JS - 'this' is reserved
+// jsfunction foo(this, x) {} //  syntax error in JS - 'this' is reserved

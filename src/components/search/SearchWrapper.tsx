@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import Search from "./Search";
-import useStorage from "../../hooks/useStorage";
 import type { NoteType } from "../../utils/db";
 import { useStorageContext } from "../../context/StorageContext";
 
