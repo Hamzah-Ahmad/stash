@@ -30,7 +30,7 @@ export const NoteCategory = {
 export type NoteCategory = (typeof NoteCategory)[keyof typeof NoteCategory];
 
 const Note = () => {
-  const { handleUpsertNote, selectedNote, notes } = useStorageContext();
+  const { handleUpsertNote, selectedNote } = useStorageContext();
 
   const [category, setCategory] = useState<NoteCategory>(NoteCategory.text);
   async function handleChange(
