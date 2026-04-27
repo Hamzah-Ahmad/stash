@@ -5,12 +5,14 @@ import useDebounce from "../../hooks/useDebounce";
 
 import "react-quill-new/dist/quill.snow.css";
 
-const Textpad = ({
+const TextSection = ({
   handleChange,
   value,
+  selectedNote
 }: {
   handleChange: (field: keyof NoteType, value: string) => Promise<any>;
   value?: string;
+  selectedNote: NoteType
 }) => {
   const [text, setText] = useState("");
   const debouncedText = useDebounce(text, 100);
@@ -27,6 +29,7 @@ const Textpad = ({
   // return <textarea value={text} />
   return (
     <ReactQuill
+      key={selectedNote?.id}
       theme="snow"
       value={text}
       onChange={(val) => setText(val)}
@@ -49,4 +52,4 @@ const Textpad = ({
   );
 };
 
-export default Textpad;
+export default TextSection;

@@ -135,5 +135,241 @@ body {
 }
 
 .quill__custom .ql-editor {
-  max-height: 70%;
+  max-height: 40%;
+  font-size: 18px;
 }
+
+.react-codemirror2 > .CodeMirror:first-child {
+  display: none;
+}
+
+.CodeMirror {
+  height: 600px !important;
+}
+
+@media only screen and (max-width: 1100px) {
+  .ql-editor {
+    height: 300px;
+  }
+
+  .CodeMirror {
+    height: 400px !important;
+  }
+}
+
+.table-wrapper {
+  /* max-width: ; */
+  min-width: 0; 
+  overflow: hidden; 
+}
+
+.table-scroll-container {
+  overflow-x: auto;
+  border: 0.5px solid var(--border-thin);
+  border-radius: var(--radius);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: auto;
+  font-size: 14px;
+  color: var(--text-1);
+}
+
+.data-table thead {
+  background-color: var(--surface-2);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.data-table th {
+  padding: 0;
+  border-bottom: 0.5px solid var(--border-thin);
+  border-right: 0.5px solid var(--border-thin);
+  font-weight: 500;
+  font-size: 13px;
+  color: var(--text-2);
+  cursor: pointer;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.data-table th:last-child {
+  border-right: none;
+}
+
+.th-inner {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px 0 0;
+}
+
+.th-input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-2);
+  width: 100%;
+  cursor: text;
+}
+
+.th-input::placeholder {
+  color: var(--text-4);
+}
+
+.sort-icon {
+  opacity: 0.4;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.data-table th:hover .sort-icon {
+  opacity: 0.8;
+}
+
+.add-col-th {
+  width: 44px;
+  min-width: 44px !important;
+  max-width: 44px !important;
+  border-right: none !important;
+  background: transparent;
+}
+
+.add-col-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  margin: 6px auto;
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border-thin);
+  background: transparent;
+  color: var(--text-3);
+  cursor: pointer;
+}
+
+.add-col-btn:hover {
+  background: var(--surface);
+  color: var(--text-1);
+  border-color: var(--border-regular);
+}
+
+.data-table td {
+  padding: 0;
+  border-bottom: 0.5px solid var(--border-thin);
+  border-right: 0.5px solid var(--border-thin);
+  vertical-align: middle;
+}
+
+.data-table td:last-child {
+  border-right: none;
+}
+
+.data-table tr:last-child td {
+  border-bottom: none;
+}
+
+.data-table tr:hover td {
+  background-color: rgba(255, 255, 255, 0.02);
+}
+
+.cell-input {
+  display: block;
+  width: 100%;
+  padding: 9px 12px;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: var(--text-1);
+  box-sizing: border-box;
+}
+
+.cell-input:focus {
+  background: rgba(100, 160, 210, 0.06);
+  box-shadow: inset 0 0 0 1.5px var(--secondary);
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 4px 0;
+}
+
+.page-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border-thin);
+  background: transparent;
+  color: var(--text-2);
+  font-size: 13px;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.page-btn:hover:not(:disabled) {
+  background: var(--surface-2);
+  color: var(--text-1);
+}
+
+.page-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.page-info {
+  font-size: 13px;
+  color: var(--text-3);
+}
+
+.category-picker {
+    display: flex;
+    gap: 2px;
+    background: var(--surface-2);
+    border: 0.5px solid var(--border-thin);
+    border-radius: var(--radius);
+    padding: 3px;
+    width: fit-content;
+  }
+
+  .category-tab {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border-radius: calc(var(--radius) - 1px);
+    border: none;
+    background: transparent;
+    color: var(--text-3);
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+
+  .category-tab:hover {
+    background: var(--surface);
+    color: var(--text-1);
+  }
+
+  .category-tab.active {
+    background: var(--dark);
+    color: var(--text-1);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  }

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import type { NoteType } from "../../utils/db";
+import { ChevronLeftIcon, ChevronRightIcon, SortAscIcon, SortDescIcon, SortIcon } from "./Icons";
 
 export type Column<T> = {
   id: string;
@@ -36,10 +37,8 @@ const Table = <T extends Record<string, unknown> & { id: string | number }>({
   const nextPageOffset = offset + limit;
   const [sortConfig, setSortConfig] = useState<Record<string, string>>({});
   const [editingCell, setEditingCell] = useState([0, 0]);
-  // const inputRef = useRef<any>(null);
 
   function handleSort(col: Column<T>) {
-    // if (!col.sortable) return;
     if (sortConfig?.[col.id]) {
       setSortConfig((prev) => ({
         [col.id]:
@@ -57,34 +56,21 @@ const Table = <T extends Record<string, unknown> & { id: string | number }>({
   function handleInput(e: any, row: any, col: any) {
     let newData = rows?.map((item) => {
       if (item.id != row.id) return item;
-
-      return {
-        ...row,
-        [col.id]: e?.target?.value,
-      };
+      return { ...row, [col.id]: e?.target?.value };
     });
-
     handleChange("table", JSON.stringify({ columns, rows: newData }));
   }
 
   function handleColChange(e: any, col: any) {
     const updatedColumns = columns.map((item) => {
       if (item.id !== col.id) return item;
-      return {
-        ...col,
-        header: e.target?.value,
-      };
+      return { ...col, header: e.target?.value };
     });
-
     handleChange("table", JSON.stringify({ columns: updatedColumns, rows }));
   }
 
   function handleAddColumn() {
-    const newColumn = {
-      id: `col-${columns.length + 1}`,
-      header: "",
-    };
-
+    const newColumn = { id: `col-${columns.length + 1}`, header: "" };
     handleChange(
       "table",
       JSON.stringify({ columns: [...columns, newColumn], rows }),
@@ -95,11 +81,9 @@ const Table = <T extends Record<string, unknown> & { id: string | number }>({
     let newRow: Record<string, string | number> = {
       id: (rows?.length || 0) + 1,
     };
-
     columns.map((col) => {
       newRow[col.id] = "";
     });
-
     handleChange("table", JSON.stringify({ rows: [...rows, newRow], columns }));
   }
 
@@ -129,12 +113,18 @@ const Table = <T extends Record<string, unknown> & { id: string | number }>({
     let tempRows = [...rows];
     for (const [key, value] of Object.entries(sortConfig)) {
       tempRows = tempRows.sort((a, b) => {
-        const valA = a?.[key] as number;
-        const valB = b?.[key] as number;
-        return value === SortDirection.DESC ? valB - valA : valA - valB;
+        const valA = a?.[key] as any;
+        const valB = b?.[key] as any;
+        if (typeof valA === "number" && typeof valB === "number")
+          return value === SortDirection.DESC ? valB - valA : valA - valB;
+        else {
+          return value === SortDirection.DESC
+            ? valB.localeCompare(valA)
+            : valA.localeCompare(valB);
+        }
       });
     }
-    setVisibleRows(tempRows?.slice(offset, nextPageOffset)); // rows.slice(offset, nextPageOffset)
+    setVisibleRows(tempRows?.slice(offset, nextPageOffset));
   }, [pageIndex, rows, sortConfig]);
 
   // useEffect(() => {
@@ -153,106 +143,129 @@ const Table = <T extends Record<string, unknown> & { id: string | number }>({
     [editingCell],
   );
 
+  const getSortIcon = (colId: string) => {
+    if (!sortConfig[colId]) return <SortIcon />;
+    return sortConfig[colId] === SortDirection.ASC ? (
+      <SortAscIcon />
+    ) : (
+      <SortDescIcon />
+    );
+  };
+
   return (
-    <>
-      <button onClick={() => handleAddColumn()}>Add Column</button>
-      <button onClick={() => handleAddRow()}>Add Row</button>
-      <table>
-        <thead>
-          <tr>
-            {columns.map((col) => {
-              const styles = {
-                minWidth: col.minWidth ?? "150px",
-                maxWidth: col.maxWidth ?? "300px",
-                border: "2px solid green",
-                minHeight: "100px",
-              };
-              return (
+    <div className="table-wrapper">
+      <div className="table-scroll-container">
+        <table className="data-table">
+          <thead>
+            <tr>
+              {columns.map((col) => (
                 <th
-                  style={styles}
                   key={col.id}
-                  onClick={() => {
-                    handleSort(col);
+                  style={{
+                    minWidth: col.minWidth ?? "160px",
+                    maxWidth: col.maxWidth ?? "320px",
                   }}
+                  onClick={() => handleSort(col)}
                 >
-                  <input
-                    defaultValue={col.header}
-                    onChange={(e) => handleColChange(e, col)}
-                  />
-                  {"^"}
+                  <div className="th-inner">
+                    <input
+                      className="th-input"
+                      defaultValue={col.header}
+                      placeholder="Column name"
+                      onChange={(e) => handleColChange(e, col)}
+                      onClick={(e) => e.stopPropagation()}
+                    />
+                    <span className="sort-icon">{getSortIcon(col.id)}</span>
+                  </div>
                 </th>
-              );
-            })}
-          </tr>
-        </thead>
-        <tbody>
-          {visibleRows?.map((rowItem: T, rowIndx) => (
-            <tr key={rowItem.id || rowIndx}>
-              {columns.map((col, colIndx) => {
-                const isEditingCell =
-                  editingCell[0] === rowIndx + offset &&
-                  editingCell[1] === colIndx;
-                const value = col.cellRenderer ? (
-                  col.cellRenderer(rowItem)
-                ) : (
-                  <input
-                    className={`text-center`}
-                    onChange={(e) => handleInput(e, rowItem, col)}
-                    onKeyDown={(e) => handleKeyDown(e, rowIndx, colIndx)}
-                    defaultValue={String(rowItem[col.id] ?? "—")}
-                    ref={isEditingCell ? inputRef : undefined} // This is a shot in the dark, it worked but need to test performance
-                  />
-                ); //String(rowItem[col.id] ?? "—");
-                return (
-                  <td className="py-4 text-center border-thin">
-                    {value}
-                  </td>
-                );
-              })}
+              ))}
+              {/* Add column button as last "column" */}
+              <th className="add-col-th">
+                <button
+                  className="add-col-btn"
+                  onClick={handleAddColumn}
+                  title="Add column"
+                >
+                  <PlusIcon />
+                </button>
+              </th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {visibleRows?.map((rowItem: T, rowIndx) => (
+              <tr key={rowItem.id || rowIndx}>
+                {columns.map((col, colIndx) => {
+                  const isEditingCell =
+                    editingCell[0] === rowIndx + offset &&
+                    editingCell[1] === colIndx;
+                  const value = col.cellRenderer ? (
+                    col.cellRenderer(rowItem)
+                  ) : (
+                    <input
+                      className="cell-input"
+                      onChange={(e) => handleInput(e, rowItem, col)}
+                      onKeyDown={(e) => handleKeyDown(e, rowIndx, colIndx)}
+                      defaultValue={String(rowItem[col.id] ?? "")}
+                      ref={isEditingCell ? inputRef : undefined}
+                    />
+                  );
+                  return (
+                    <td
+                      key={col.id}
+                      onClick={() =>
+                        setEditingCell([rowIndx + offset, colIndx])
+                      }
+                    >
+                      {value}
+                    </td>
+                  );
+                })}
+                <td className="add-col-th" />
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
       {rows.length > 10 && (
-        <div>
+        <div className="pagination">
           <button
+            className="page-btn"
             disabled={pageIndex < 1}
             onClick={() => setPageIndex(pageIndex - 1)}
           >
-            Prev
+            <ChevronLeftIcon /> Prev
           </button>
+          <span className="page-info">
+            Page {pageIndex + 1} of {Math.ceil(total / limit)}
+          </span>
           <button
+            className="page-btn"
             disabled={nextPageOffset >= total}
             onClick={() => setPageIndex(pageIndex + 1)}
           >
-            Next
+            Next <ChevronRightIcon />
           </button>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
+
+const PlusIcon = () => (
+  <svg
+    width="14"
+    height="14"
+    viewBox="0 0 14 14"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.5"
+    strokeLinecap="round"
+  >
+    <line x1="7" y1="2" x2="7" y2="12" />
+    <line x1="2" y1="7" x2="12" y2="7" />
+  </svg>
+);
+
 export default Table;
-
-// Explanations
-////////////////////
-// handleEnter code below with comments
-//  if (e.code === "Enter") {
-//       // rowIndx + offset refers to the curent row index and page (so 0 row index is the first row, and if offset is 10 then that means 1st row on the SECOND page)
-//       // The line below setsEditing cell to the row AFTER the current row (hence the +1)
-//       setEditingCell([rowIndx + offset + 1, colIndx]);
-
-//       // Subtracting 1 as index is 0 based. So for example (consider offset 0 as on first page), if there are 3 rows and we're on the last row
-//       // that will be rowIndex 2. We need to add a new row in this case. So the logic is 2 + 0 === 3 - 1.
-//       if (rowIndx + offset  === rows.length - 1) { // If
-//         handleAddRow();
-//       }
-//     }
-
-// More explanations
-// I'm adding rowIndex with offset when comparing in multiple places, because rowIndex starts at 0 for each page
-//  so if rows length is 17 for example, then there will be three pages and we'll need to add the offset to compare properly
-//  for example on the second page rowIndex 2 will be 2 + 10 (10 being the offset), in order to properly compare against
-//  rows.length (17). Same logic for when setting editingCell (on second page if we press enter on the 11th row it should lead to
-// (rowIndex + offset) + 1 => (1 + 10) + 1 => 12th row

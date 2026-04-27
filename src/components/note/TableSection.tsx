@@ -25,12 +25,18 @@ const TableSection = ({ selectedNote, handleChange }: TableSectionProps) => {
     ? JSON.parse(selectedNote.table)
     : undefined;
 
-  const columns = useMemo(() => tableData ? tableData.columns : defaultColumns, [tableData?.columns]);
-  const rows = useMemo(() => tableData ? tableData.rows : defaulRows, [tableData?.rows]);
-
-  return (
-    <Table columns={columns} rows={rows} handleChange={handleChange} />
+  const columns = useMemo(
+    () => (tableData ? tableData.columns : defaultColumns),
+    [tableData?.columns],
   );
+  const rows = useMemo(
+    () => (tableData ? tableData.rows : defaulRows),
+    [tableData?.rows],
+  );
+
+  console.log("LOGGER - table ", {rows, columns}   )
+
+  return <Table key={selectedNote?.id} columns={columns} rows={rows} handleChange={handleChange} />;
 };
 
 export default TableSection;

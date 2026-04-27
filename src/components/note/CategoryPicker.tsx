@@ -1,19 +1,30 @@
-import type { Dispatch, SetStateAction } from "react";
+import type { Dispatch, ReactElement, SetStateAction } from "react";
 import { NoteCategory } from "./Note";
+import { CodeIcon, TableIcon, TextIcon } from "../shared/Icons";
+
+const icons: Record<NoteCategory, ReactElement> = {
+  text: <TextIcon />,
+  table: <TableIcon />,
+  code: <CodeIcon />,
+};
 
 const CategoryPicker = ({
+  category,
   setCategory,
 }: {
+  category: NoteCategory;
   setCategory: Dispatch<SetStateAction<NoteCategory>>;
 }) => {
   return (
-    <div className="flex gap-4 w-full mb-2">
-      {Object.values(NoteCategory)?.map((cat: NoteCategory) => (
+    <div className="category-picker">
+      {Object.values(NoteCategory).map((cat: NoteCategory) => (
         <button
-          className="px-4 py-2 rounded-radius"
+          key={cat}
+          className={`category-tab ${category === cat ? "active" : ""}`}
           onClick={() => setCategory(cat)}
+          title={cat}
         >
-          {cat}
+          {icons[cat]}
         </button>
       ))}
     </div>

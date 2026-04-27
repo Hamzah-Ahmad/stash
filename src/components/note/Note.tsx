@@ -1,10 +1,12 @@
 import { type NoteType } from "../../utils/db";
 import { useStorageContext } from "../../context/StorageContext";
-import Textpad from "../shared/Textpad";
 import CategoryPicker from "./CategoryPicker";
 import { useState } from "react";
 import TableSection from "./TableSection";
+import TextSection from "./TextSection";
+import CodeSection from "./CodeSection";
 
+// Typescript 5.8 doesn't like enums. refernce: https://www.totaltypescript.com/erasable-syntax-only
 export const NoteCategory = {
   text: "text",
   table: "table",
@@ -29,7 +31,7 @@ const Note = () => {
   }
 
   return (
-    <div className="flex flex-2 h-[stretch] flex-col mx-30 bg-surface border border-thin rounded-radius p-6 my-10">
+    <div className="flex flex-2 h-[stretch] flex-col mx-30 bg-surface border border-thin rounded-radius p-6 my-10 overflow-x-auto">
       {!selectedNote ? null : (
         <>
           <input
@@ -39,12 +41,13 @@ const Note = () => {
             }}
             value={selectedNote?.title || "Untitled"}
           />
-          <CategoryPicker setCategory={setCategory} />
+          <CategoryPicker category={category} setCategory={setCategory} />
           {category === NoteCategory.text && (
-            <Textpad
+            <TextSection
               key="text"
               handleChange={handleChange}
               value={selectedNote?.text || ""}
+              selectedNote={selectedNote}
             />
           )}
           {category === NoteCategory.table && (
@@ -55,12 +58,11 @@ const Note = () => {
             />
           )}
           {category === NoteCategory.code && (
-            <textarea
+            <CodeSection
               key="code-editor"
-              className="border border-thin w-full rounded-radius p-3"
-              onChange={(e) => handleChange("code", e.target?.value)}
-              rows={5}
+              onChange={(val: string) => handleChange("code", val)} //handleChange("code", e.target?.value)
               value={selectedNote?.code}
+              selectedNote={selectedNote}
             />
           )}
         </>
