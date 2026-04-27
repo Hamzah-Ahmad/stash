@@ -5,8 +5,13 @@ import type { NoteType } from "../../utils/db";
 import { throttle } from "../../utils/helpers";
 
 const Sidebar = () => {
-  const { notes, handleSelectNote, handleUpsertNote, handleReorder, selectedNote } =
-    useStorageContext();
+  const {
+    notes,
+    handleSelectNote,
+    handleUpsertNote,
+    handleReorder,
+    selectedNote,
+  } = useStorageContext();
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -27,21 +32,21 @@ const Sidebar = () => {
   }
 
   const throttledScroll = throttle(handleScroll, 450);
-  const filteredNotes = notes?.filter(note => {
-    if(!searchQuery) return true;
-    return note.title?.includes(searchQuery)
-  })
+  const filteredNotes = notes?.filter((note) => {
+    if (!searchQuery) return true;
+    return note.title?.toLowerCase()?.includes(searchQuery?.toLowerCase());
+  });
 
   return (
     <div className="sidebar">
-      <div className="m-10 mb-14 flex flex-col gap-10 justify-center">
+      <div className="mb-10 mx-7 mt-0 flex flex-col gap-10 justify-center">
         <input
-          className="border border-thin w-[95% rounded-full h-14 pl-6"
+          className="title__search__input"
           placeholder="Search a note by title"
           onChange={(e) => setSearchQuery(e.target.value)}
         />
         <button
-          className="border border-thin py-5  cursor-pointer rounded-radius-lg"
+          className="border border-thin py-3  cursor-pointer rounded-radius-lg bg-deep"
           onClick={create}
         >
           Create Note

@@ -3,6 +3,7 @@ import { createPortal } from "react-dom";
 import Search from "./Search";
 import useStorage from "../../hooks/useStorage";
 import type { NoteType } from "../../utils/db";
+import { useStorageContext } from "../../context/StorageContext";
 
 export type SearchResult = {
   index: number;
@@ -16,7 +17,7 @@ export default function SearchWrapper() {
   const [showModal, setShowModal] = useState(false);
 
   // Adding search functionality here instead of the bar because this component renderes once.
-  const { notes } = useStorage();
+  const { notes } = useStorageContext();
 
   function search(query: string): SearchResult[] {
     const trimmedQuery = query.toLowerCase()?.trim();
@@ -35,10 +36,10 @@ export default function SearchWrapper() {
               index,
               note,
               field,
-              startIndex: Math.max(index - 10, 0),
+              startIndex: Math.max(index - 20, 0), // want to show some text before nad after the highlighted text. This method is crude but gets the job done
               endIndex: Math.min(
                 String(note?.[field] ?? "").length - 1,
-                index + 10,
+                index + 20,
               ),
               query: trimmedQuery,
             };
@@ -65,7 +66,7 @@ export default function SearchWrapper() {
   }, [open]);
 
   return (
-    <>
+    <> 
       {showModal &&
         createPortal(
           <Search onClose={() => setShowModal(false)} search={search} />,

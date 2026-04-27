@@ -32,6 +32,9 @@ const Note = () => {
 
   return (
     <div className="flex flex-2 h-[stretch] flex-col mx-30 bg-surface border border-thin rounded-radius p-6 my-10 overflow-x-auto">
+      <div className="text-right text-xs mb-4 text-text-2">
+        <span className="bg-dark px-2 py-1 rounded-xs">Shift + Space</span> for global search by text or code content.
+      </div>
       {!selectedNote ? null : (
         <>
           <input
@@ -39,14 +42,13 @@ const Note = () => {
             onChange={(e) => {
               handleChange("title", e.target.value);
             }}
-            value={selectedNote?.title || "Untitled"}
+            value={selectedNote?.title || ""}
           />
           <CategoryPicker category={category} setCategory={setCategory} />
           {category === NoteCategory.text && (
             <TextSection
               key="text"
               handleChange={handleChange}
-              value={selectedNote?.text || ""}
               selectedNote={selectedNote}
             />
           )}
@@ -61,7 +63,6 @@ const Note = () => {
             <CodeSection
               key="code-editor"
               onChange={(val: string) => handleChange("code", val)} //handleChange("code", e.target?.value)
-              value={selectedNote?.code}
               selectedNote={selectedNote}
             />
           )}

@@ -1,4 +1,4 @@
-import Seach from "../components/search";
+import SeachWrapper from "../components/search";
 import { StorageProvider } from "../context/StorageContext";
 import Notes from "./Notes";
 
@@ -7,7 +7,7 @@ function App() {
     <div className="grain-global">
       <StorageProvider>
         <Notes />
-        <Seach />
+        <SeachWrapper />
       </StorageProvider>
     </div>
   );

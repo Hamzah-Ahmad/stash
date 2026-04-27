@@ -34,8 +34,6 @@ const TableSection = ({ selectedNote, handleChange }: TableSectionProps) => {
     [tableData?.rows],
   );
 
-  console.log("LOGGER - table ", {rows, columns}   )
-
   return <Table key={selectedNote?.id} columns={columns} rows={rows} handleChange={handleChange} />;
 };
 

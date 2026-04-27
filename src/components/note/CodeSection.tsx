@@ -7,10 +7,10 @@ import type { NoteType } from "../../utils/db";
 
 type CodeSectionProps = {
   onChange: (val: string) => Promise<any>;
-  value?: string;
   selectedNote: NoteType;
 };
-const CodeSection = ({ value, onChange, selectedNote }: CodeSectionProps) => {
+const CodeSection = ({ onChange, selectedNote }: CodeSectionProps) => {
+  const value = selectedNote?.code;
   return (
     <CodeMirror
       key={selectedNote?.id}

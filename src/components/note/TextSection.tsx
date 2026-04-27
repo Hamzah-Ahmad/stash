@@ -7,24 +7,21 @@ import "react-quill-new/dist/quill.snow.css";
 
 const TextSection = ({
   handleChange,
-  value,
   selectedNote
 }: {
   handleChange: (field: keyof NoteType, value: string) => Promise<any>;
-  value?: string;
   selectedNote: NoteType
 }) => {
-  const [text, setText] = useState("");
-  const debouncedText = useDebounce(text, 100);
+  const [text, setText] = useState(selectedNote?.text);
+  const debouncedText = useDebounce(text, 300);
 
   useEffect(() => {
-    if (debouncedText === value) return;
     handleChange("text", debouncedText || "");
   }, [debouncedText]);
 
   useEffect(() => {
-    setText(value || "");
-  }, [value]);
+    setText(selectedNote?.text || "")
+  }, [selectedNote?.id]);
 
   // return <textarea value={text} />
   return (

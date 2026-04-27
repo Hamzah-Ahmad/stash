@@ -47,7 +47,7 @@ const Row = ({
       onDrop={(e) => handleDrop(e, note)}
       draggable
     >
-      {note.title || `Untitled`}
+      {note.title || `Enter a title`}
     </div>
   );
 };

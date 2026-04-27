@@ -17,34 +17,42 @@ type SearchProps = {
 const ResultRow = ({
   result,
   isFocused,
+  handleClick,
 }: {
   result: SearchResult;
   isFocused: boolean;
+  handleClick: (id: string) => void;
 }) => {
   const { endIndex, field, note, query, startIndex } = result;
-  const substring = (note?.[field] as string)?.substring(
+  let substring = (note?.[field] as string)?.substring(
     startIndex,
     endIndex + 1,
   );
+  // React-quill saves the text as html.
+  // The if block removes html like tags, and removes the &nbsp; with a space. Not perfect, but gets the job done
+  if (field === "text") {
+    substring = substring.replace(/<[^>]*>?/gm, "").replace(/&nbsp;/g, " ");
+  }
   const stringArr = substring.split(new RegExp(`(${query})`, "gi"));
   return (
     <div
       className={`p-4 hover:bg-surface mb-2 ${isFocused ? "bg-surface" : ""}`}
+      onClick={() => handleClick(note.id)}
     >
-      <div>{note?.title || "Untitled"}</div>
-      <small>
-        ...
+      <div className="text-xl">{note?.title || "Untitled"}</div>
+      <div className="text-base">
+        ..
         {stringArr?.map((item) => (
           <>
             {item?.toLowerCase() === query?.toLowerCase() ? (
-              <span className="bg-red-300">{item}</span>
+              <span className="font-extrabold text-secondary">{item}</span>
             ) : (
               <>{item}</>
             )}
           </>
         ))}
-        ...
-      </small>
+        ..
+      </div>
     </div>
   );
 };
@@ -66,9 +74,7 @@ const Search = ({ onClose, search }: SearchProps) => {
     setFocusedNoteIndx(-1);
   }, [results]);
 
-
   function onKeyDown(e: KeyboardEvent<HTMLInputElement>) {
-
     if (e.key === "ArrowUp") {
       setFocusedNoteIndx((prev) => {
         if (prev === null || prev === -1) return prev;
@@ -98,14 +104,21 @@ const Search = ({ onClose, search }: SearchProps) => {
     onClose();
   }
 
+  function handleClickRow(noteId: string) {
+    handleSelectNote(noteId);
+    onClose();
+  }
+
   useOnClickOutside(ref, handleOnClickOutside);
   return (
-    <div className="search__modal" ref={ref}>
+    <div className="search__overlay">
+    <div className="search__bar" ref={ref}>
       <input autoFocus onChange={handleSearch} onKeyDown={onKeyDown} />
       {results?.length ? (
-        <div className="h-fit max-h-96 w-full bg-surface-2 overflow-y-auto">
+        <div className="h-fit max-h-52 w-full bg-surface-2 overflow-y-auto absolute mt-2 rounded-radius">
           {results.map((result: SearchResult, index) => (
             <ResultRow
+              handleClick={handleClickRow}
               result={result}
               key={result?.note?.id}
               isFocused={index === focusedNoteIndx}
@@ -113,6 +126,7 @@ const Search = ({ onClose, search }: SearchProps) => {
           ))}
         </div>
       ) : null}
+    </div>
     </div>
   );
 };
