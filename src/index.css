@@ -152,12 +152,13 @@ body {
   min-height: 400px;
 }
 
-.react-codemirror2 > .CodeMirror:first-child {
+/* Code mirror is appearing twice in local so added the styles. But on prod we only see one so commenting */
+/* .react-codemirror2 > .CodeMirror:first-child {
   display: none;
-}
+} */
 
 .CodeMirror {
-  height: 600px !important;
+  height: 525px !important;
 }
 
 .collapse__btn {

@@ -22,8 +22,6 @@ const Sidebar = ({
     deleteNote,
   } = useStorageContext();
 
-  console.log("LOGGER - isCOllapsed ", isCollapsed);
-
   const sidebarRef = useRef<HTMLDivElement>(null);
 
   const [searchQuery, setSearchQuery] = useState("");
