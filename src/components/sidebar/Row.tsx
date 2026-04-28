@@ -1,5 +1,12 @@
-import { type Dispatch, type DragEvent, type SetStateAction } from "react";
+import {
+  useState,
+  type Dispatch,
+  type DragEvent,
+  type SetStateAction,
+} from "react";
 import type { NoteType } from "../../utils/db";
+import { CheckIcon, CloseIcon, SortIcon, TrashIcon } from "../shared/Icons";
+import IconButton from "../shared/IconButton";
 
 interface RowProps {
   note: NoteType;
@@ -8,15 +15,25 @@ interface RowProps {
   draggedNote: NoteType | null;
   setDraggedNote: Dispatch<SetStateAction<NoteType | null>>;
   isSelectedNote: boolean;
+
+  handleDelete: (id: string, rowIndex: number) => Promise<void>;
+  rowIndex: number;
 }
+
 const Row = ({
   note,
   handleReorder,
   handleSelectNote,
   draggedNote,
   setDraggedNote,
-  isSelectedNote
+  isSelectedNote,
+  handleDelete,
+  rowIndex,
 }: RowProps) => {
+
+  
+  const [markToDelete, setMarkToDelete] = useState(false);
+
   function handleDragStart(_: DragEvent<HTMLDivElement>, note: NoteType) {
     setDraggedNote(note);
   }
@@ -39,7 +56,7 @@ const Row = ({
 
   return (
     <div
-      className={`sidebar__row ${isSelectedNote? 'bg-deeper' : ''}`}
+      className={`sidebar__row ${isSelectedNote ? "bg-deeper" : ""}`}
       onClick={() => handleSelectNote(note.id)}
       onDragStart={(e) => handleDragStart(e, note)}
       onDragEnd={(e) => handleDragEnd(e, note)}
@@ -47,7 +64,40 @@ const Row = ({
       onDrop={(e) => handleDrop(e, note)}
       draggable
     >
-      {note.title || `Enter a title`}
+      <div className="flex justify-between items-center">
+        <span className="max-w-[80%] truncate">
+          {markToDelete ? "Are you sure?" : note.title || `Enter a title`}
+        </span>
+        {markToDelete ? (
+          <div className="flex justify-between gap-5">
+            <IconButton
+              className="fill-red"
+              icon={CloseIcon}
+              onClick={(e) => {
+                e.stopPropagation();
+                setMarkToDelete(false);
+              }}
+            />
+            <IconButton
+              className="fill-green"
+              icon={CheckIcon}
+              onClick={async (e) => {
+                e.stopPropagation();
+                handleDelete(note.id, rowIndex);
+              }}
+            />
+          </div>
+        ) : (
+          <IconButton
+            className="fill-red"
+            icon={TrashIcon}
+            onClick={(e) => {
+              e.stopPropagation();
+              setMarkToDelete(true);
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };

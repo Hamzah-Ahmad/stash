@@ -403,3 +403,11 @@ body {
   outline-width: thin;
   outline-color: var(--secondary);
 }
+
+
+.fill-red svg:hover{
+  fill: rgb(248, 99, 99);
+}
+.fill-green svg:hover{
+  fill: rgb(77, 150, 60);
+}

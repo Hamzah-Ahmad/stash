@@ -48,6 +48,16 @@ const useStorage = () => {
     }
   }
 
+  async function deleteNote(id: string) {
+    try {
+      await noteService.delete(id);
+      await handleGetNotes();
+    } catch (err) {
+      setError(err as Error);
+      console.error("Error when creating note", err);
+    }
+  }
+
   async function handleGetNoteById(id: string) {
     try {
       const note = await noteService.getById(id);
@@ -59,6 +69,7 @@ const useStorage = () => {
   }
 
   async function handleSelectNote(id: string) {
+    if(!id) setSelectedNote(undefined); // Sending empty id to deselect notes. Useful when deleting final note
     const foundNote = await handleGetNoteById(id);
     if (foundNote) setSelectedNote(foundNote);
   }
@@ -77,17 +88,15 @@ const useStorage = () => {
     // Case when draggedNote order is originally greater than target note (so dragging the draggedNote "down". Example note with order 4 is being dragged to note with order 3.)
     if (draggedNote.order > targetNote.order) {
       adjacentNote =
-        notes[(notes.findIndex((note) => note.id === targetNote.id)) + 1]; // +1 as we are in desscending order and note is being dragged down so we get midppoint between target note and the note after that in descending order. Example, note with order 4 being dragged down to note with order 3, and the next item will be note with order 2. So dragged row order will change to 2.5 ((3+2) / 2)
+        notes[notes.findIndex((note) => note.id === targetNote.id) + 1]; // +1 as we are in desscending order and note is being dragged down so we get midppoint between target note and the note after that in descending order. Example, note with order 4 being dragged down to note with order 3, and the next item will be note with order 2. So dragged row order will change to 2.5 ((3+2) / 2)
 
       // Calculating new order of dragged note accorrding to logic written above
       // Explanation for the else ternary is at the bottom of the file
       newOrder = adjacentNote
         ? (adjacentNote?.order + targetNote.order) / 2
         : notes?.[notes?.length - 1]?.order / 2;
-
     } else {
-
-     // Else block logic explained below
+      // Else block logic explained below
       adjacentNote =
         notes[notes.findIndex((note) => note.id === targetNote.id) - 1];
       newOrder = adjacentNote
@@ -103,8 +112,8 @@ const useStorage = () => {
   }, []);
 
   useEffect(() => {
-    if(!selectedNote) setSelectedNote(notes?.[0])
-  }, [notes])
+    if (!selectedNote) setSelectedNote(notes?.[0]);
+  }, [notes]);
 
   return {
     notes,
@@ -115,6 +124,7 @@ const useStorage = () => {
     selectedNote,
     handleSelectNote,
     handleReorder,
+    deleteNote,
   };
 };
 
@@ -158,4 +168,4 @@ export default useStorage;
 //         : notes?.[0]?.order + 1;
 //     }
 
-// Getting adjacentNote 
+// Getting adjacentNote

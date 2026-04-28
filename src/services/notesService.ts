@@ -1,4 +1,10 @@
-import { upsertNote, getNoteById, getNotes, type NoteType } from "../utils/db";
+import {
+  upsertNote,
+  getNoteById,
+  getNotes,
+  deletNote,
+  type NoteType,
+} from "../utils/db";
 
 export const noteService = {
   getAll: async (): Promise<NoteType[]> => {
@@ -21,6 +27,14 @@ export const noteService = {
   getById: async (id: string): Promise<NoteType | undefined> => {
     try {
       return await getNoteById(id);
+    } catch (err) {
+      throw new Error("Failed to create note", { cause: err });
+    }
+  },
+
+  delete: async (id: string): Promise<void> => {
+    try {
+      await deletNote(id);
     } catch (err) {
       throw new Error("Failed to create note", { cause: err });
     }

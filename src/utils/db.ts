@@ -83,3 +83,16 @@ export async function upsertNote(
     request.onerror = () => reject(request.error);
   });
 }
+
+export async function deletNote(id: string): Promise<void> {
+  if (!id) return;
+  const db = await setupDB();
+  return new Promise((resolve, reject) => {
+    const tx = db.transaction(STORE_NAME, "readwrite");
+    const store = tx.objectStore(STORE_NAME);
+    const request = store.delete(id);
+
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+}

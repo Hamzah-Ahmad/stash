@@ -11,6 +11,7 @@ const Sidebar = () => {
     handleUpsertNote,
     handleReorder,
     selectedNote,
+    deleteNote,
   } = useStorageContext();
 
   const sidebarRef = useRef<HTMLDivElement>(null);
@@ -29,6 +30,15 @@ const Sidebar = () => {
       [dir]: 100, // scroll down 100px
       behavior: "smooth",
     });
+  }
+
+  async function handleDelete(id: string, rowIndex: number) {
+    await deleteNote(id);
+    if (notes?.length) {
+      if (notes[rowIndex + 1]) handleSelectNote(notes[rowIndex + 1].id);
+      else if (notes[rowIndex - 1]) handleSelectNote(notes[rowIndex - 1].id);
+      else handleSelectNote(""); // Set selected note as undefined
+    }
   }
 
   const throttledScroll = throttle(handleScroll, 450);
@@ -60,8 +70,8 @@ const Sidebar = () => {
         }}
       ></div>
       <div className="sidebar__items" ref={sidebarRef}>
-        {filteredNotes?.map((note) => (
-          <Row
+        {filteredNotes?.map((note, index) => (
+          <Row 
             note={note}
             handleSelectNote={handleSelectNote}
             handleReorder={handleReorder}
@@ -69,6 +79,8 @@ const Sidebar = () => {
             draggedNote={draggedNote}
             setDraggedNote={setDraggedNote}
             isSelectedNote={selectedNote?.id === note.id}
+            handleDelete={handleDelete}
+            rowIndex={index}
           />
         ))}
       </div>
