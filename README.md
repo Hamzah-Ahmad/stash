@@ -14,7 +14,6 @@ The main goal of building these without using libraries or packages is to unders
 
 
 ## Items Pending:
-- Delete notes
 - Improve responsiveness
 - Code cleanup
 - Thorough testing

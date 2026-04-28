@@ -62,6 +62,8 @@ body {
   overflow-x: hidden;
   padding-top: 40px;
   padding-bottom: 40px;
+  z-index: 999;
+  transition: all 0.25s linear;
 }
 
 .sidebar__items {
@@ -158,13 +160,34 @@ body {
   height: 600px !important;
 }
 
-@media only screen and (max-width: 1100px) {
+.collapse__btn {
+  display: none;
+}
+
+@media only screen and (max-width: 1024px) {
   .ql-editor {
     height: 300px;
   }
 
   .CodeMirror {
     height: 400px !important;
+  }
+
+  .sidebar {
+    position: absolute;
+    width: 100%;
+    padding-top: 48px;
+  }
+
+  .sidebar.collapsed {
+    transform: translateX(-100vw);
+  }
+
+  .collapse__btn {
+    display: block;
+    position: absolute;
+    top: 8px;
+    left: 16px;
   }
 }
 
@@ -404,10 +427,9 @@ body {
   outline-color: var(--secondary);
 }
 
-
-.fill-red svg:hover{
+.fill-red svg:hover {
   fill: rgb(248, 99, 99);
 }
-.fill-green svg:hover{
+.fill-green svg:hover {
   fill: rgb(77, 150, 60);
 }

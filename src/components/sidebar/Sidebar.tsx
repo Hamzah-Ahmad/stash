@@ -1,10 +1,18 @@
-import { useRef, useState } from "react";
+import { useRef, useState, type Dispatch, type SetStateAction } from "react";
 import { useStorageContext } from "../../context/StorageContext";
 import Row from "./Row";
 import type { NoteType } from "../../utils/db";
 import { throttle } from "../../utils/helpers";
+import IconButton from "../shared/IconButton";
+import { CloseIcon } from "../shared/Icons";
 
-const Sidebar = () => {
+const Sidebar = ({
+  isCollapsed,
+  setIsCollapsed,
+}: {
+  isCollapsed: boolean;
+  setIsCollapsed: Dispatch<SetStateAction<boolean>>;
+}) => {
   const {
     notes,
     handleSelectNote,
@@ -13,6 +21,8 @@ const Sidebar = () => {
     selectedNote,
     deleteNote,
   } = useStorageContext();
+
+  console.log("LOGGER - isCOllapsed ", isCollapsed);
 
   const sidebarRef = useRef<HTMLDivElement>(null);
 
@@ -48,7 +58,13 @@ const Sidebar = () => {
   });
 
   return (
-    <div className="sidebar">
+    <div className={`sidebar ${isCollapsed ? "collapsed" : ""}`}>
+      <IconButton
+        className="block lg:hidden absolute top-4 right-4"
+        icon={CloseIcon}
+        onClick={() => setIsCollapsed(true)}
+      />
+
       <div className="mb-10 mx-7 mt-0 flex flex-col gap-10 justify-center">
         <input
           className="title__search__input"
@@ -71,7 +87,7 @@ const Sidebar = () => {
       ></div>
       <div className="sidebar__items" ref={sidebarRef}>
         {filteredNotes?.map((note, index) => (
-          <Row 
+          <Row
             note={note}
             handleSelectNote={handleSelectNote}
             handleReorder={handleReorder}

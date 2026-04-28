@@ -5,7 +5,7 @@ import {
   type SetStateAction,
 } from "react";
 import type { NoteType } from "../../utils/db";
-import { CheckIcon, CloseIcon, SortIcon, TrashIcon } from "../shared/Icons";
+import { CheckIcon, CloseIcon, TrashIcon } from "../shared/Icons";
 import IconButton from "../shared/IconButton";
 
 interface RowProps {

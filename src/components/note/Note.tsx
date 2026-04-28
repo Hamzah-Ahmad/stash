@@ -46,7 +46,7 @@ const Note = () => {
   }
 
   return (
-    <div className="flex flex-2 h-[stretch] flex-col mx-30 bg-surface border border-thin rounded-radius p-6 my-10 overflow-x-auto">
+    <div className="flex flex-2 h-[stretch] flex-col mx-4 md:mx-12 lg:max-30 bg-surface border border-thin rounded-radius p-6 my-10 overflow-x-auto">
       <div className="text-right text-xs mb-4 text-text-2">
         <span className="bg-dark px-2 py-1 rounded-xs">Shift + Space</span> for
         global search by text or code content.
