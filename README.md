@@ -2,6 +2,14 @@
 
 Built this application as a successor to my [local-notes](https://local-notes0.netlify.app/) app, where users can create notes that are stored inside the user's browser's indexed storage
 
+## Disclaimer
+⚠️ Stash is a personal side project built for learning and experimentation.
+
+This application is provided "as is" without warranties of any kind. The author is not responsible for any data loss, corruption, browser storage issues, or other damages resulting from the use of this software.
+
+Please maintain backups of any important data and do not rely on this application as your sole source of storage for critical information.
+
+## Goals
 The main goal was to gain hands on experience with the following
 
 - Custom drag and drop implementation (no libraries)
