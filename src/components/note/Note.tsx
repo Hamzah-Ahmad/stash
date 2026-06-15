@@ -14,9 +14,16 @@ const Empty = () => {
         Click the Create button on the sidebar to create your first note All
         notes are saved automatically to your browser's storage
       </div>
-      <small className="text-text-3 text-xl w-[75%] text-center">
-        (By creating a note, you consent to storing your note data locally in
-        your browser’s IndexedDB storage on this device.)
+      <small className="text-text-3 text-xs w-[75%] text-center">
+        Notes are stored locally in your browser's IndexedDB storage on this
+        device.
+      </small>
+      <small className="text-text-3 text-xs w-[75%] text-center">
+        Browser storage may be cleared, become unavailable, or be removed by
+        browser or system cleanup processes. Please keep backups of important
+        notes. Stash is an experimental side project built for learning purposes
+        and should not be relied upon as the sole storage location for important
+        data.
       </small>
     </div>
   );
@@ -51,7 +58,9 @@ const Note = () => {
         <span className="bg-dark px-2 py-1 rounded-xs">Shift + Space</span> for
         global search by text or code content.
       </div>
-      {!selectedNote ? <Empty /> : (
+      {!selectedNote ? (
+        <Empty />
+      ) : (
         <>
           <input
             className="title__input w-full mb-8"
