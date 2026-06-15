@@ -1,6 +1,5 @@
 # Description
-
-Built this application as a successor to my [local-notes](https://local-notes0.netlify.app/) app, where users can create notes that are stored inside the user's browser's indexed storage
+A browser-native note-taking application with persistent data storage implemented via IndexedDB.
 
 ## Disclaimer
 ⚠️ Stash is a personal side project built for learning and experimentation.
