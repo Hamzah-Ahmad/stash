@@ -1,5 +1,5 @@
 # Description
-A browser-native note-taking application with persistent data storage implemented via IndexedDB.
+A browser-native knowledge workspace with persistent data storage implemented via IndexedDB.
 
 ## Disclaimer
 ⚠️ Stash is a personal side project built for learning and experimentation.
